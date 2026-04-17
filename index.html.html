@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>청렴 MBTI — 나는 어떤 청렴 유형?</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f5f3ee;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --text-sub: #666;
+    --accent: #2d6a4f;
+    --accent-light: #e8f5ee;
+    --accent2: #f4a261;
+    --border: #e0ddd6;
+    --radius: 16px;
+  }
+  body {
+    font-family: 'Noto Sans KR', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    color: var(--text);
+  }
+  .container { width: 100%; max-width: 540px; }
+  .header { text-align: center; margin-bottom: 2rem; }
+  .header .badge {
+    display: inline-block;
+    background: var(--accent);
+    color: #fff;
+    font-size: 12px;
+    font-weight: 500;
+    padding: 5px 14px;
+    border-radius: 100px;
+    margin-bottom: 12px;
+    letter-spacing: 0.05em;
+  }
+  .header h1 { font-size: 26px; font-weight: 700; line-height: 1.3; margin-bottom: 6px; }
+  .header p { font-size: 14px; color: var(--text-sub); }
+  .card {
+    background: var(--card);
+    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    padding: 2rem;
+  }
+  .progress-wrap { margin-bottom: 1.5rem; }
+  .progress-info { display: flex; justify-content: space-between; font-size: 13px; color: var(--text-sub); margin-bottom: 8px; }
+  .progress-bar { height: 5px; background: var(--border); border-radius: 10px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--accent); border-radius: 10px; transition: width 0.4s ease; }
+  .q-text { font-size: 17px; font-weight: 500; line-height: 1.6; margin-bottom: 1.5rem; min-height: 80px; }
+  .options { display: flex; flex-direction: column; gap: 10px; margin-bottom: 1.5rem; }
+  .opt-btn {
+    width: 100%;
+    text-align: left;
+    padding: 14px 18px;
+    border-radius: 12px;
+    border: 1.5px solid var(--border);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    line-height: 1.5;
+    transition: all 0.15s;
+  }
+  .opt-btn:hover { border-color: var(--accent); background: var(--accent-light); }
+  .opt-btn.selected { border-color: var(--accent); background: var(--accent-light); color: var(--accent); font-weight: 500; }
+  .next-btn {
+    width: 100%;
+    padding: 14px;
+    border-radius: 12px;
+    border: none;
+    background: var(--accent);
+    color: #fff;
+    font-size: 16px;
+    font-weight: 500;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    transition: opacity 0.2s, transform 0.1s;
+  }
+  .next-btn:disabled { opacity: 0.3; cursor: not-allowed; }
+  .next-btn:not(:disabled):hover { opacity: 0.88; }
+  .next-btn:not(:disabled):active { transform: scale(0.98); }
+  .result-wrap { text-align: center; }
+  .result-animal { font-size: 64px; margin-bottom: 8px; animation: pop 0.4s ease; }
+  @keyframes pop {
+    0% { transform: scale(0.5); opacity: 0; }
+    80% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  .result-label { font-size: 13px; color: var(--text-sub); margin-bottom: 4px; }
+  .result-name { font-size: 24px; font-weight: 700; color: var(--accent); margin-bottom: 1rem; }
+  .result-divider { width: 40px; height: 3px; background: var(--accent2); border-radius: 10px; margin: 0 auto 1rem; }
+  .result-desc { font-size: 15px; color: var(--text-sub); line-height: 1.75; text-align: left; margin-bottom: 1.25rem; }
+  .tags { display: flex; flex-wrap: wrap; justify-content: center; gap: 7px; margin-bottom: 1.5rem; }
+  .tag { font-size: 13px; padding: 5px 13px; border-radius: 100px; font-weight: 500; }
+  .tag-green { background: #e8f5ee; color: #2d6a4f; }
+  .tag-orange { background: #fef3e8; color: #b5541a; }
+  .tag-blue { background: #e8f0fe; color: #1a4fa0; }
+  .retry-btn {
+    width: 100%;
+    padding: 13px;
+    border-radius: 12px;
+    border: 1.5px solid var(--border);
+    background: transparent;
+    color: var(--text-sub);
+    font-size: 14px;
+    font-family: 'Noto Sans KR', sans-serif;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .retry-btn:hover { border-color: var(--accent); color: var(--accent); }
+  .footer { text-align: center; margin-top: 1.5rem; font-size: 12px; color: #aaa; }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="badge">청렴 자가진단</div>
+    <h1>나는 어떤 청렴 유형일까?</h1>
+    <p>4가지 질문으로 알아보는 나의 청렴 MBTI</p>
+  </div>
+
+  <div class="card" id="quiz-card">
+    <div class="progress-wrap">
+      <div class="progress-info">
+        <span id="q-label">Q1 / 4</span>
+        <span id="q-pct">0%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill" id="prog" style="width:0%"></div></div>
+    </div>
+    <div class="q-text" id="q-text"></div>
+    <div class="options" id="options"></div>
+    <button class="next-btn" id="next-btn" disabled onclick="nextQ()">다음으로 →</button>
+  </div>
+
+  <div class="card" id="result-card" style="display:none">
+    <div class="result-wrap" id="result-wrap"></div>
+  </div>
+
+  <div class="footer">© 청렴Day 자가진단 퀴즈</div>
+</div>
+
+<script>
+// val: 0 = 원칙에 느슨한 선택, 1 = 원칙에 철저한 선택
+// 4문항 val 합계(0~4)로 5가지 유형 결정
+const questions = [
+  {
+    text: "부서 회식 자리에서 나보다 직급 높은 분이 계산하려 한다. 나는?",
+    options: [
+      { text: "당연히 감사히 받는다. 선배님이 내신다는데!", val: 0 },
+      { text: "모른 척하기 찜찜해서 조용히 더치페이를 제안한다.", val: 1 },
+    ]
+  },
+  {
+    text: "학부모에게 작은 선물(음료, 과일 등)을 받았다. 나는?",
+    options: [
+      { text: "너무 작은 거라 일단 받고, 나중에 비슷한 걸로 돌려드린다.", val: 0 },
+      { text: "마음이 불편해서 정중히 거절한다.", val: 1 },
+    ]
+  },
+  {
+    text: "동료 선생님이 수업 자료 공유를 부탁한다. 나는?",
+    options: [
+      { text: "당연하지! 아낌없이 다 드린다.", val: 0 },
+      { text: "흔쾌히 드리지만, 저작권 있는 건 아닌지 먼저 확인한다.", val: 1 },
+    ]
+  },
+  {
+    text: "회의에서 불공정해 보이는 결정이 났다. 나는?",
+    options: [
+      { text: "회의 후 따로 담당자에게 조심스럽게 이야기한다.", val: 0 },
+      { text: "그 자리에서 바로 의견을 낸다. 말해야 바뀐다!", val: 1 },
+    ]
+  }
+];
+
+// 합계 점수 0~4 → 유형 5가지
+const results = [
+  {
+    animal: "🦊",
+    label: "느긋한 현실주의자형",
+    name: "눈치 청렴인",
+    desc: "규정을 알면서도 현실과 타협하는 편이에요. 나쁜 의도는 전혀 없지만, 가끔 '이 정도는 괜찮겠지?' 하는 순간이 위험 신호! 작은 선택 하나가 신뢰를 만든다는 걸 기억해요.",
+    tags: ["현실적", "눈치 빠름", "주의 필요"]
+  },
+  {
+    animal: "🐢",
+    label: "소심한 청렴 실천가형",
+    name: "조용한 청렴인",
+    desc: "마음속으론 청렴하고 싶은데, 표현하기가 쑥스러운 타입이에요. 거절도 건의도 조심스럽지만, 그 마음 자체가 이미 청렴의 시작이에요. 조금 더 용기를 내봐요!",
+    tags: ["착한 마음", "소심함", "잠재력 폭발"]
+  },
+  {
+    animal: "🌿",
+    label: "균형 잡힌 실천형",
+    name: "조화 청렴인",
+    desc: "원칙도 지키고, 상황도 읽고, 관계도 챙기는 균형 잡힌 타입이에요. 무리하게 갈등을 만들지 않으면서도 옳은 방향으로 나아가는 지혜로운 청렴인!",
+    tags: ["균형감", "지혜로움", "관계+원칙 동시에"]
+  },
+  {
+    animal: "🦉",
+    label: "고민 많은 원칙주의자형",
+    name: "갈등 청렴인",
+    desc: "옳고 그름에 민감하고, 행동으로도 잘 옮기는 타입이에요. 내면의 청렴 기준이 높아서 스스로에게도 엄격한 편! 그 기준, 정말 잘 지켜가고 있어요.",
+    tags: ["신중함", "원칙 중시", "내면 청렴"]
+  },
+  {
+    animal: "🦁",
+    label: "원칙 수호자형",
+    name: "청렴 수호자",
+    desc: "원칙을 지키는 게 당연한 타입! 불편한 상황도 단호하게 대처할 줄 알고, 주변에 신뢰를 주는 존재예요. 우리 학교의 청렴 문화는 이런 분들 덕분에 유지됩니다.",
+    tags: ["신뢰의 아이콘", "원칙 수호", "믿음직함"]
+  }
+];
+
+let answers = [], current = 0, selected = null;
+
+function render() {
+  const q = questions[current];
+  document.getElementById('q-label').textContent = `Q${current+1} / ${questions.length}`;
+  const pct = Math.round(current / questions.length * 100);
+  document.getElementById('q-pct').textContent = pct + '%';
+  document.getElementById('prog').style.width = pct + '%';
+  document.getElementById('q-text').textContent = q.text;
+  const optDiv = document.getElementById('options');
+  optDiv.innerHTML = '';
+  q.options.forEach(o => {
+    const btn = document.createElement('button');
+    btn.className = 'opt-btn';
+    btn.textContent = o.text;
+    btn.onclick = () => {
+      selected = o.val;
+      document.querySelectorAll('.opt-btn').forEach(b => b.classList.remove('selected'));
+      btn.classList.add('selected');
+      document.getElementById('next-btn').disabled = false;
+    };
+    optDiv.appendChild(btn);
+  });
+  selected = null;
+  document.getElementById('next-btn').disabled = true;
+  document.getElementById('next-btn').textContent = current === questions.length - 1 ? '결과 보기! 🎉' : '다음으로 →';
+}
+
+function nextQ() {
+  if (selected === null) return;
+  answers.push(selected);
+  if (current < questions.length - 1) { current++; render(); }
+  else showResult();
+}
+
+function showResult() {
+  const score = answers.reduce((a, b) => a + b, 0); // 0~4
+  const r = results[score];
+  document.getElementById('quiz-card').style.display = 'none';
+  document.getElementById('result-card').style.display = 'block';
+  const tagClass = ['tag-green', 'tag-orange', 'tag-blue'];
+  const tags = r.tags.map((t, i) => `<span class="tag ${tagClass[i]}">${t}</span>`).join('');
+  document.getElementById('result-wrap').innerHTML = `
+    <div class="result-animal">${r.animal}</div>
+    <div class="result-label">${r.label}</div>
+    <div class="result-name">${r.name}</div>
+    <div class="result-divider"></div>
+    <div class="result-desc">${r.desc}</div>
+    <div class="tags">${tags}</div>
+    <button class="retry-btn" onclick="restart()">↩ 다시 해보기</button>
+  `;
+}
+
+function restart() {
+  answers = []; current = 0; selected = null;
+  document.getElementById('result-card').style.display = 'none';
+  document.getElementById('quiz-card').style.display = 'block';
+  render();
+}
+
+render();
+</script>
+</body>
+</html>
